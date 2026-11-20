@@ -140,8 +140,8 @@ details p{color:var(--mut);margin-top:12px;font-size:15px;animation:op .4s}
 .final img{width:90px;height:90px;border-radius:24px;box-shadow:0 24px 60px -10px rgba(255,92,138,.8);margin-bottom:18px;animation:fl 5s ease-in-out infinite}
 .final h2{margin-bottom:10px}.final .sub{margin-bottom:26px}
 footer{text-align:center;color:var(--mut);font-size:14px;padding:34px 0 54px}
-.rv{opacity:0;transform:translateY(26px) scale(.98);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}.rv.in{opacity:1;transform:none}
-.c.rv.in,.st.rv.in,.p.rv.in{transition:opacity .8s,transform .8s cubic-bezier(.2,.7,.2,1),translate .3s,border-color .3s}
+.rv{opacity:0;transform:translateY(26px) scale(.98);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.34,1.56,.64,1)}.rv.in{opacity:1;transform:none}
+.c.rv.in,.st.rv.in,.p.rv.in{transition:opacity .8s,transform .9s cubic-bezier(.34,1.56,.64,1),translate .3s,border-color .3s}
 
 .cur{position:fixed;left:0;top:0;width:460px;height:460px;margin:-230px 0 0 -230px;border-radius:50%;pointer-events:none;z-index:-1;background:radial-gradient(circle,rgba(255,92,138,.17),rgba(139,123,255,.08) 45%,transparent 65%)}
 .bg{filter:hue-rotate(var(--hr,0deg))}.bg i{translate:0 var(--oy,0px)}
@@ -179,6 +179,25 @@ h2.rv.in{transform:none;filter:none;letter-spacing:-.025em}
 .rip{position:absolute;border-radius:50%;background:rgba(255,255,255,.5);transform:scale(0);pointer-events:none;animation:rp2 .75s ease-out forwards}
 @keyframes rp2{to{transform:scale(1);opacity:0}}
 .final{scale:var(--fs,1)}
+
+:root{--sp:cubic-bezier(.34,1.56,.64,1)}
+.rv:not(.in){transition-duration:.35s!important;transition-delay:0s!important}
+.c.rv:not(.in):nth-child(odd),.st.rv:not(.in):nth-child(odd),.p.rv:not(.in):nth-child(odd){transform:perspective(900px) translate(-60px,50px) rotateX(14deg) rotateZ(-5deg) scale(.88)}
+.c.rv:not(.in):nth-child(even),.st.rv:not(.in):nth-child(even),.p.rv:not(.in):nth-child(even){transform:perspective(900px) translate(60px,50px) rotateX(14deg) rotateZ(5deg) scale(.88)}
+.pv figure.rv:not(.in){transform:translateY(90px) scale(.78) rotate(-7deg)}.pv figure.rv:not(.in):nth-child(2){transform:translateY(90px) scale(.78) rotate(7deg)}
+.c.in .ic{animation:ic .9s var(--sp) .3s backwards}
+@keyframes ic{from{transform:scale(0) rotate(-140deg)}}
+.pv .phone{animation:fl 6s ease-in-out infinite}.pv figure:nth-child(2) .phone{animation-delay:-3s}
+.pv figure.in .scr>*:not(.sg){animation:pp .7s var(--sp) backwards}
+.pv figure.in .scr>*:nth-child(2){animation-delay:.35s}.pv figure.in .scr>*:nth-child(3){animation-delay:.5s}.pv figure.in .scr>*:nth-child(4){animation-delay:.65s}.pv figure.in .scr>*:nth-child(5){animation-delay:.8s}
+@keyframes pp{from{opacity:0;transform:translateY(30px) scale(.6) rotate(-6deg)}}
+.gb u{animation:wg 2.4s ease-in-out infinite}
+@keyframes wg{0%,70%,100%{transform:none}78%{transform:rotate(-8deg) scale(1.1)}86%{transform:rotate(7deg) scale(1.1)}94%{transform:rotate(-4deg)}}
+.mp{position:relative;overflow:hidden}
+.mp:after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.6),transparent);transform:skewX(-20deg);animation:sh 3s ease-in-out infinite}
+.mp.g:after{animation-delay:1.2s}
+@keyframes sh{0%,55%{left:-60%}100%{left:130%}}
+.tri div span{animation:hp .6s ease-in-out infinite alternate}.tri div:nth-child(2) span{animation-delay:.2s}.tri div:nth-child(3) span{animation-delay:.4s}
 @media(hover:none){.cur{display:none}}
 @media(prefers-reduced-motion:reduce){.c.rv,.st.rv,.p.rv,h2.rv{transform:none;filter:none}}
 @media(max-width:820px){.hero{grid-template-columns:1fr;text-align:center;padding-top:42px}.lead{margin:0 auto}.cta{justify-content:center}.nl a{display:none}.nl a.k{display:inline-flex}.stage{margin-top:20px}}
@@ -302,9 +321,8 @@ h2.rv.in{transform:none;filter:none;letter-spacing:-.025em}
   var rv=[].slice.call(document.querySelectorAll(".rv"));
   if(!("IntersectionObserver" in window)){rv.forEach(function(e){e.classList.add("in")})}
   else{
-    var io=new IntersectionObserver(function(a){a.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.12});
+    var io=new IntersectionObserver(function(a){a.forEach(function(e){e.target.classList.toggle("in",e.isIntersecting)})},{threshold:.1,rootMargin:"0px 0px -6% 0px"});
     rv.forEach(function(e){var i=[].indexOf.call(e.parentNode.children,e);e.style.transitionDelay=Math.min(i,5)*70+"ms";io.observe(e)});
-    setTimeout(function(){rv.forEach(function(e){e.classList.add("in")})},3500);
   }
   var pr=document.getElementById("prog");
   function sc(){var h=document.documentElement;pr.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight||1)*100)+"%"}
